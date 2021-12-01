@@ -1,0 +1,14 @@
+result page
+<br><br>
+{% block contents %}
+    {{current_sem.semester_name}}
+    <br><br>
+    {% for result in results %}
+        {{result.student}}
+        {{result.subject}}
+        {{result.grade}}
+        {{result.credit}}
+        <hr>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% block content %}
+hello world
+<br>
+<br>
+
+
+    {% for profile in profiles %}
+        {{profile.name}}-{{profile.roll_no}}-{{profile.dept}}-{{profile.year_of_study}}
+        <hr>
+    {% endfor %}
+
+{% endblock %}

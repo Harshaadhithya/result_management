@@ -1,0 +1,10 @@
+result_home
+<br><br>
+{% block contents %}
+
+{% for semester in semesters %}
+    <a href="{% url 'results' semester.id %}">{{semester.semester_name}}</a>
+    <hr>
+{% endfor %}
+
+{% endblock %}
