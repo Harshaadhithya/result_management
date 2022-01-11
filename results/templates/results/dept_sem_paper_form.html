@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+    
+    <div class="container" style="margin-top:5%; width: 40%; background-color:#212529;  align-items:center; text-align:center; padding:20px 0 3px 0; ">
+        <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Department</p>
+    </div>
+
+    <div class="container" style=" width: 40%; background-color:#212529;  align-items:center; padding:20px 50px 50px 50px; " >
+<form action="" method='POST' style="padding:0px 40px 0px 40px; ">
+    {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">Semester:</label>
+                {{form.semester|add_class:"form-select"}}
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">Department:</label>
+                {{form.dept}}
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">Batch:</label>
+                {{form.batch}}
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">Subjects:</label>
+                <div style="color: #d8e2ed;">
+                    {{form.subjects}}
+                </div>
+                
+            </div>
+              
+              <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+</div>
+
+
+{% endblock %}

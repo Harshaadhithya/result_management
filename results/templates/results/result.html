@@ -1,14 +1,61 @@
-result page
-<br><br>
-{% block contents %}
-    {{current_sem.semester_name}}
-    <br><br>
-    {% for result in results %}
-        {{result.student}}
-        {{result.subject}}
-        {{result.grade}}
-        {{result.credit}}
-        <hr>
-    {% endfor %}
+{% extends 'main.html' %}
+{% block content %}
+<br>
+<div class="container" style="width: 60%; background-color:#212529;  align-items:center; text-align:center; padding:20px 0 3px 0; margin-top:3%;">
+      <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Semester {{semester.semester_name}}</p>
+</div>
+<div class="container" style="width: 60%; background-color:#212529; text-align:justify; padding:2px 4px 10px 4px; font-size:14px;">
+  
+  <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;" > <span style="font-weight: bold; color:#d8e2ed;">Name : </span >{{student.name}}</p>
+  <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;"> <span style="font-weight: bold; color:#d8e2ed;"> Roll no : </span >{{student.roll_no}}</p>
+  <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;"> <span style="font-weight: bold; color:#d8e2ed;"> Dept : </span >{{student.dept}}</p>
+  <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;"> <span style="font-weight: bold; color:#d8e2ed;"> Batch : </span >{{student.batch}} Batch</p>
+</div>
+<div class="container" style="width: 60%; background-color:#f5f6f7;  align-items:center; text-align:center; padding:5px 10px; " >
+  
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+            
+            <th class="text-uppercase" scope="col">Subject</th>
+            <th class="text-uppercase" scope="col"> <nobr>Grade Point</nobr></th>
+            <th class="text-uppercase" scope="col">Grade</th>
+            <th class="text-uppercase" scope="col">Credit</th>
+            <th class="text-uppercase" scope="col">Status</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+          <tr>
+            
+            <td class="text-uppercase">{{result.subject.subject_expansion}}</td>
+            <td>{{result.grade}}</td>
+            <td>{{result.grade_string}}</td>
+            <td>{{result.credit}}</td>
+            {% if result.status == True %}
+            <td class="text-uppercase table-success "><i class="fas fa-check-circle" style="color: #038024;"></i></td>
+            {% else %}
+            <td class="text-uppercase table-danger "><i class="fas fa-times-circle" style="color: #992943;"></i></td>
+            {% endif %}
+
+          </tr>
+          {% endfor %}
+          
+
+        </tbody>
+  </table>
+</div>
+<div class="container" style="width: 60%; background-color:#f5f6f7; text-align:justify; padding:2px 0 10px 0; margin-bottom:5%;">
+  
+  <p style="margin-inline-start: 78%;"> <span style="font-weight: bold;">TOTAL CREDITS : </span>{{final_result.total_credits}}</p>
+  <p style="margin-inline-start: 78%;"> <span style="font-weight: bold;"> CGPA : </span>{{final_result.cgpa}}</p>
+  {% if final_result.no_of_arrears == 0 %}
+  <p style="margin-inline-start: 78%;"> <span style="font-weight: bold;"> STATUS : </span>All Clear</p>
+  {% else %}
+  <p style="margin-inline-start: 78%;"> <span style="font-weight: bold;"> STATUS : </span>{{final_result.no_of_arrears}} Arrear{{final_result.no_of_arrears|pluralize:"s"}}</p>
+  {% endif %}
+</div>
 
 {% endblock %}

@@ -1,0 +1,41 @@
+{% if page == 'update' %}
+    {{result.student}}
+    <br>
+    {{result.semester}}
+    <br>
+    {{result.subject}}
+    <br>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            {{field.label}}:
+            {{field}}
+        {% endfor %}
+    <input type="submit">
+    </form>
+    
+{% else %}
+
+{{sem_obj}}
+<br>
+{{student_obj.roll_no}}
+<br>
+Subject lists:
+<hr>
+{% for subject in subjects %}
+    {{subject}}
+    <br>
+{% endfor %}
+<hr>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{formset.management_form}}
+    {% for form in formset %}
+        
+        {{form}}
+        <br><br>
+    {% endfor %}
+    <input type="submit">
+</form>
+
+{% endif %}

@@ -1,0 +1,138 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<br>
+  {% if page == 'students_result' %}
+      <div class="container" style="width: 85%; background-color:#212529; margin-top:3%; align-items:center; text-align:center; padding:2%;">
+          <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; "><nobr>Semester {{semester.semester_name}}</nobr> </p>
+          <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; "><nobr>{{dept.dept_expansion}}</nobr> </p>
+          <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; "><nobr>{{batch}} Batch</nobr> </p>
+
+      </div>
+      <div class="container" style="width: 85%; background-color:#f5f6f7;  align-items:center; padding:1% 1.5% 1.5% 1.5%;">
+
+        <table class="table table-bordered">
+            <thead style="text-align:center;">
+                <tr>
+                  <th class="text-uppercase" scope="col"> <nobr>Profile</nobr></th>
+
+                  <th class="text-uppercase" scope="col">Roll no</th>  
+                  <th class="text-uppercase" scope="col">Name</th>
+                  <th class="text-uppercase" scope="col">Total Credits</th>
+                  <th class="text-uppercase" scope="col">CGPA</th>
+                  <th class="text-uppercase" scope="col">Status</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for final_result in final_results_list %}
+                <tr style="vertical-align:middle; text-align:center;">
+                    <td class="text-uppercase">
+                        <img src="{{final_result.student.profile_img.url}}" class="mx-auto d-block rounded-circle" alt="demo" style="width: 40px; height: 40px; object-fit:cover;">
+                      </td>
+                  <td class="text-uppercase "> {{final_result.student.roll_no}} </td>
+                  <td class="text-uppercase" > {{final_result.student.name}} </td>
+                  <td class="text-uppercase" >{{final_result.total_credits}}</td>
+                  <td class="text-uppercase" > {{final_result.cgpa}} </td>
+                  {% if final_result.no_of_arrears == 0 %}
+                  <td class="text-uppercase text-uppercase table-success" >All Clear</td>
+                  {% else %}
+                  <td class="text-uppercase text-uppercase table-danger" >{{final_result.no_of_arrears}} Arrear{{final_result.no_of_arrears|pluralize:"s"}}</td>
+                  {% endif %}
+
+                  <td class="text-uppercase">
+                    <a href="{% url 'admin_result_view' final_result.id %}"><i class="fas fa-eye"></i></a>
+                  </td>
+                  <td class="text-uppercase"><a style="text-decoration: none; " href="{% url 'update_result_view' final_result.student.id %}"><i class="fas fa-edit" style="color: #c29929;"></i></a></td>
+
+                <td class="text-uppercase"><a style="text-decoration: none; color:red;" href="{% url 'delete_result' final_result.id %}"><i class="fas fa-trash-alt" style="color: #992943;"></i></a></td>
+                </tr>
+                {% endfor %}
+
+                {% for student in unupdated_students %}
+                <tr style="vertical-align:middle; text-align:center;">
+                    <td class="text-uppercase">
+                        <img src="{{student.profile_img.url}}" class="mx-auto d-block rounded-circle" alt="demo" style="width: 40px; height: 40px; object-fit:cover;">
+                      </td>
+                  <td class="text-uppercase "> {{student.roll_no}} </td>
+                  <td class="text-uppercase" > {{student.name}} </td>
+                  <td class="text-uppercase" >-</td>
+                  <td class="text-uppercase" > - </td>
+                  <td class="text-uppercase" >-</td>
+                  
+                  <td class="text-uppercase text-uppercase" >-</td>
+                  
+
+                  <td class="text-uppercase">
+                    <a href=""></a>
+                  </td>
+                  <td class="text-uppercase"><a style="text-decoration: none; font-size:12px;"" href="{% url 'create_result' student.id %}">+ Add Result</a></td>
+
+                <td class="text-uppercase"><a style="text-decoration: none; " href=""></a></td>
+                </tr>
+                {% endfor %}
+                
+                
+
+              </tbody>
+        </table>
+      </div>
+    {% else %}
+    <div class="container" style="width: 85%; background-color:#212529; margin-top:3%; align-items:center; text-align:center; padding:2%;">
+      <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Results </p>
+
+  </div>
+  <div class="container" style="width: 85%; background-color:#f5f6f7;  align-items:center; padding:1% 1.5% 1.5% 1.5%;">
+
+    <table class="table table-bordered">
+        <thead style="text-align:center;">
+            <tr>
+              <th class="text-uppercase" scope="col"> <nobr>Profile</nobr></th>
+
+              <th class="text-uppercase" scope="col">Roll no</th>  
+              <th class="text-uppercase" scope="col">Name</th>
+              <th class="text-uppercase" scope="col"> <nobr>Semester</nobr></th>
+
+              <th class="text-uppercase" scope="col">Total Credits</th>
+              <th class="text-uppercase" scope="col">CGPA</th>
+              <th class="text-uppercase" scope="col">Status</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% if final_results %}
+            {% for final_result in final_results %}
+            <tr style="vertical-align:middle; text-align:center;">
+                <td class="text-uppercase">
+                    <img src="{{final_result.student.profile_img.url}}" class="mx-auto d-block rounded-circle" alt="demo" style="width: 40px; height: 40px; object-fit:cover;">
+                  </td>
+              <td class="text-uppercase "> {{final_result.student.roll_no}} </td>
+              <td class="text-uppercase" > {{final_result.student.name}} </td>
+              <td class="text-uppercase" > {{final_result.semester.semester_name}} </td>
+
+              <td class="text-uppercase" >{{final_result.total_credits}}</td>
+              <td class="text-uppercase" > {{final_result.cgpa}} </td>
+              {% if final_result.no_of_arrears == 0 %}
+              <td class="text-uppercase text-uppercase table-success" >All Clear</td>
+              {% else %}
+              <td class="text-uppercase text-uppercase table-danger" >{{final_result.no_of_arrears}} Arrear{{final_result.no_of_arrears|pluralize:"s"}}</td>
+              {% endif %}
+
+              <td class="text-uppercase">
+                <a href="{% url 'results' final_result.semester.id %}"><i class="fas fa-eye"></i></a>
+              </td>
+             </tr>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert" style="width: 30%; margin-left:35%; text-align:center" >
+              No Results to show!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>  
+            {% endif %}
+            
+
+          </tbody>
+    </table>
+  </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% if students %}
+        {% for student in students %}
+            {% if student.id in result_updated_students_list %}
+            <p>{{student}}</p>
+            <a href="{% url 'update_result_view' student.id %}">edit</a>
+            {% else %}
+                <a href="{% url 'create_result' student.id %}">{{student}}</a>   
+            {% endif %}
+            <br>            
+        {% endfor %}
+    {% endif %}

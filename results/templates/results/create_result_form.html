@@ -1,0 +1,89 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+{% if page == 'update' %}
+<div class="container" style="margin-top:4%; width: 40%; background-color:#212529;  align-items:center; text-align:center; padding:20px 0 3px 0; ">
+    <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Result</p>
+    <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Semester {{result.semester}}</p>
+
+</div>
+<div class="container" style="width: 40%; background-color:#212529; text-align:justify; padding:2px 4px 1px 20px; font-size:14px;">
+  
+    <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;" > <span style="font-weight: bold; color:#d8e2ed;">Name : </span >{{result.student.name}}</p>
+    <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;"> <span style="font-weight: bold; color:#d8e2ed;"> Roll no : </span >{{result.student.roll_no}}</p>
+    <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;"> <span style="font-weight: bold; color:#d8e2ed;"> Batch : </span >{{result.student.batch}} Batch</p>
+  </div>
+
+<div class="container" style=" width: 40%; background-color:#212529;  align-items:center; padding:20px 50px 50px 50px; " >
+    <p class="text-uppercase" style="text-align:center; color:#d8e2ed; letter-spacing: 1px;" > <span style="font-weight: bold; color:#d8e2ed;">Subject : </span >{{result.subject}}</p>
+
+<form action="" method="POST" style="margin-inline-start: 35%; width:30%;">
+    {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+            <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">{{field.label}}:</label>
+            {{field}}
+          </div>
+        {% endfor %}
+          
+          <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+</div>
+    
+   
+{% else %}
+
+
+    <div class="container" style="margin-top:5%; width: 50%; background-color:#212529;  align-items:center; text-align:center; padding:20px 0 3px 0; ">
+        <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Result</p>
+        <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">{{sem_obj}}</p>
+        <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">{{student_obj.dept.dept_expansion}}</p>
+        <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">{{student_obj.batch}}-Batch</p>
+
+    </div>
+    <div class="container" style="width: 50%; background-color:#212529; text-align:justify; padding:2px 4px 1px 55px; font-size:14px;">
+  
+        <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;" > <span style="font-weight: bold; color:#d8e2ed;">Name : </span >{{student_obj.name}}</p>
+        <p class="text-uppercase" style="margin-inline-start: 2%; color:#d8e2ed; letter-spacing: 1px;"> <span style="font-weight: bold; color:#d8e2ed;"> Roll no : </span >{{student_obj.roll_no}}</p>
+      </div>
+
+    <div class="container" style=" width: 50%; background-color:#212529;  align-items:center; padding:10px 50px 50px 50px; " >
+
+        <form action="" method="POST"  style="padding: 3%;">
+            {% csrf_token %}
+            {{formset.management_form}}
+            {% for form in formset %}
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">{{form.subject.label}}:</label>
+                        <br>
+                        {{form.subject|add_class:"form-control"}}
+                    </div>
+                    
+                    
+                    <br>
+                    <div class="col-md-6">
+                        <label for="formGroupExampleInput" class="form-label  " style="font-weight:300; color: #d8e2ed;">Grade Point:</label>
+                        {{form.grade|add_class:"form-control"}}
+                    </div>
+                </div>
+                
+                
+            </div>
+            <hr style="color: #d8e2ed;">
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width: 80px;">Submit</button>
+        </form>
+
+        
+
+
+</div>
+{% endif %}
+
+
+{% endblock %}

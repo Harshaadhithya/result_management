@@ -2,9 +2,20 @@ result_home
 <br><br>
 {% block contents %}
 
-{% for semester in semesters %}
-    <a href="{% url 'results' semester.id %}">{{semester.semester_name}}</a>
-    <hr>
-{% endfor %}
+{% if user_type == 'student' %}
+    {% for semester in semester_list %}
+        <a href="{% url 'results' semester.id %}">{{semester}}</a>
+        <hr>
+    {% endfor %}
+{% else %}
+
+    <h3>links:</h3>
+    <br><br>
+    <a href="{% url 'create_subject' %}">create subject</a><br>
+    <a href="{% url 'create_sem' %}">create semester</a><br>
+    <a href="{% url 'create_dept_sem_papers' %}">create dept sem papers</a><br>
+    <a href="{% url 'create_result_home_form' %}">create result</a>
+{% endif %}
+
 
 {% endblock %}

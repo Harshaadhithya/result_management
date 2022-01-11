@@ -37,10 +37,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     'results.apps.ResultsConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+
+    'widget_tweaks',
+    
 ]
+
+SITE_ID = 2
+LOGIN_REDIRECT_URL='/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '541614477063-62aktk8u0hikbcjdbb2c1hkddb0c0h8f.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,6 +96,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'result_management.wsgi.application'
 
 
@@ -82,6 +110,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 
 # Password validation
@@ -117,12 +150,27 @@ USE_L10N = True
 USE_TZ = True
 
 
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER='skillhub.in@gmail.com'
+EMAIL_HOST_PASSWORD='negeeeamdotqcpoe'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+    ]
+
+MEDIA_ROOT=os.path.join(BASE_DIR,'static/images')
+MEDIA_URL='/images/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

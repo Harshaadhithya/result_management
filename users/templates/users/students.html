@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+{% block content %}
+<br>
+      <div class="container" style="width: 80%; background-color:#212529; margin-top:3%; align-items:center; text-align:center; padding:2%;">
+          <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; "><nobr>Kumaraguru College of Technology</nobr> </p>
+
+          <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; "><nobr>Students</nobr> </p>
+          
+
+      </div>
+      <div class="container" style="width: 80%; background-color:#f5f6f7;  align-items:center; padding:1.5%;">
+        <div class="row" style="margin-bottom: 6px; justify-content: space-between;" >
+            <div class="col">
+              <form action="">
+                <div class="input-group mb-3" style="width: 70%;">
+                    <input type="text" class="form-control" placeholder="Roll-no,dept,name..." aria-label="Recipient's username" aria-describedby="button-addon2" name="search_query" value={{search_query}}>
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2" style="border-color:#212529 ;"><i class="fas fa-search"></i></button>
+                </div>
+              </form>
+              
+              
+            </div>
+            <div class="col" >
+                <button type="button" class="btn btn-success text-uppercase" style="margin-left:50%;" ><a href="{% url 'create_user' %}" style="text-decoration: none; color:#f5f6f7">+ Create Student </a> </button>
+        
+              
+            </div>
+          </div>
+        
+
+
+        
+
+        <table class="table table-bordered">
+            <thead style="text-align:center;">
+                <tr>
+                <th class="text-uppercase" scope="col"> <nobr>Profile</nobr></th>
+                  <th class="text-uppercase" scope="col">Roll no</th>  
+                  <th class="text-uppercase" scope="col">Name</th>
+                  <th class="text-uppercase" scope="col">department</th>
+                  <th class="text-uppercase" scope="col">Batch</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                  {% for student in students %}
+                <tr style="vertical-align:middle; text-align:center;">
+                  <td class="text-uppercase">
+                      <img src="{{student.profile_img.url}}" class="mx-auto d-block rounded-circle" alt="demo" style="width: 40px; height: 40px; object-fit:cover;">
+                    </td>
+                  <td class="text-uppercase ">{{student.roll_no}}</td>
+                  <td class="text-uppercase" >{{student.name}}</td>
+                  <td class="text-uppercase" >{{student.dept}}</td>
+                  <td class="text-uppercase" >{{student.batch}}</td>
+                  <td class="text-uppercase">
+                    <a href="{% url 'student_profile' student.id %}"><i class="fas fa-eye"></i></a>
+                  </td>
+                  <td class="text-uppercase"><a style="text-decoration: none;" href="{% url 'edit_student' student.id %}"><i class="fas fa-edit" style="color: #c29929;"></i> </a></td>
+                </tr>
+                {% endfor %}
+
+
+              </tbody>
+        </table>
+      </div>
+{% endblock %}

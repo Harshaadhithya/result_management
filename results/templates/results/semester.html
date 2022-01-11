@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<br>
+      <div class="container" style="width: 70%; background-color:#212529;  align-items:center; text-align:center; padding:20px 0 3px 0; margin-top:3%;">
+            <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Semesters</p>
+      </div>
+      <div class="container" style="width: 70%; background-color:#f5f6f7;  align-items:center; text-align:center; padding:10px; " >
+        <button type="button" class="btn btn-success text-uppercase" style=" margin-inline-start: 80%; margin-bottom:10px;"> <a href="{% url 'create_sem'%}" style="color: white; text-decoration:none;"><span>&#43</span>  Add Semester</a> </button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                
+                  <th class="text-uppercase" scope="col">Semester Name</th>  
+                  <th class="text-uppercase" scope="col">Year</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for semester in semesters %}
+                <tr>
+                  <td class="text-uppercase">{{semester.semester_name}}</td>
+                  <td class="text-uppercase">{{semester.year}}</td>
+                  <td class="text-uppercase"><a style="text-decoration: none;" href="{% url 'update_sem' semester.id %}"><i class="fas fa-edit" style="color: #c29929;"></i></a></td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+        </table>
+        
+      </div>
+
+{% endblock %}

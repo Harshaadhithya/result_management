@@ -1,0 +1,69 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<br>
+      <div class="container" style="width: 50%; background-color:#212529; margin-top:3%; align-items:center; padding:2%;">
+        <div class="container" style="width: 50%; background-color:#212529;  align-items:center; text-align:center; padding:3px 0 3px 0; ">
+          <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Profile</p>
+        </div>
+        <img src="{{profile.profile_img.url}}" class="mx-auto d-block rounded-circle" alt="demo" style="width: 230px; height: 230px; object-fit:cover; border: 5px solid #d8e2ed;">
+
+      </div>
+      <div class="container" style="width: 50%; background-color:#f5f6f7;  align-items:center; padding:1.5%; margin-bottom:2%;">
+        
+        
+
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="text-uppercase font-weight-normal" scope="row">Name:</th>
+              <td class="text-uppercase font-weight-light">{{profile.name}}</td>
+              
+            </tr>
+            {% if profile.role == 'student' %}
+            <tr>
+              <th class="text-uppercase font-weight-normal" scope="row">Dept:</th>
+              <td class="text-uppercase font-weight-light">{{profile.dept}}</td>
+              
+            </tr>
+            <tr>
+              <th class="text-uppercase font-weight-normal" scope="row">Roll no:</th>
+              <td class="text-uppercase font-weight-light">{{profile.roll_no}}</td>
+              
+            </tr>
+            <tr>
+                <th class="text-uppercase font-weight-normal" scope="row">Batch:</th>
+                <td class="text-uppercase font-weight-light">{{profile.batch}}</td>
+                
+              </tr>
+              
+              {% else %}
+              <th class="text-uppercase font-weight-normal" scope="row">admin user</th>
+              {% endif %}
+              <tr>
+                <th class="text-uppercase font-weight-normal" scope="row">Date of Birth:</th>
+                <td class="text-uppercase font-weight-light">{{profile.dob}}</td>
+                
+              </tr>
+            <tr>
+              <th class="text-uppercase font-weight-normal" scope="row">Address:</th>
+              <td class="text-uppercase font-weight-light">{{profile.address}} </td>
+            
+            </tr>
+            
+            <tr>
+              <th class="text-uppercase font-weight-normal" scope="row">Gender:</th>
+              <td class="text-uppercase font-weight-light">{{profile.gender}}</td>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+{% endblock %}
