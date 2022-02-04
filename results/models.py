@@ -89,6 +89,15 @@ class Result(models.Model):
                 name='unique for student subject and semester'
             )]
 
+class ResultCsv(models.Model):
+    file_name=models.FileField(upload_to='csvfiles/')
+    activated=models.BooleanField(default=False)
+    created=models.DateTimeField(auto_now_add=True)
+    id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)
+
+    def __str__(self):
+        return "File-id:{},File-name:{}".format(self.id,self.file_name)
+
 class FinalResult(models.Model):
     student=models.ForeignKey(Profile,on_delete=models.CASCADE)
     semester=models.ForeignKey(Semester,on_delete=models.CASCADE,null=True,blank=True)

@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+    
+    <div class="container" style="margin-top:8%; width: 40%; background-color:#212529;  align-items:center; text-align:center; padding:20px 0 3px 0; ">
+        <p class="text-uppercase font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:25px; letter-spacing: 2px; ">Result</p>
+    </div>
+
+    <div class="container" style=" width: 40%; background-color:#212529;  align-items:center; padding:20px 50px 50px 50px; " >
+        <p class=" font-weight-light" style="color:#d8e2ed;  font-weight:lighter; font-size:20px; letter-spacing: 2px; ">This must be the format of your csv file.</p>
+        <img src="{% static 'images/csv_format1.png' %}" style="margin-bottom: 6px;" alt="">
+        <br>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label" style="color:#d8e2ed">Upload a CSV file</label>
+                    {{field}}
+                </div>
+                {% endfor %}
+                    
+                <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}

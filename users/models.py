@@ -11,7 +11,6 @@ def year_choices():
 
 
 
-# Create your models here.
 class Department(models.Model):
     name=models.CharField(max_length=200,unique=True)
     dept_expansion=models.CharField(max_length=200,unique=True,null=True)

@@ -1,9 +1,11 @@
+from distutils.log import error
+from enum import unique
 from django import contrib
 from django.db.models import fields
 from django.forms.formsets import formset_factory
 from django.shortcuts import redirect, render
 
-from results.forms import SubjectForm,SemesterForm,ResultForm,SemPapersForm,admin_result_form,FinalResultForm
+from results.forms import SubjectForm,SemesterForm,ResultForm,SemPapersForm,admin_result_form,FinalResultForm,csv_form
 from .models import FinalResult,Semester,Subject,Result,SemPapers
 from users.models import Department,Profile
 from django.forms import inlineformset_factory
@@ -11,6 +13,8 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+
+import csv,io
 
 #checked
 @login_required(login_url='login')
@@ -42,7 +46,9 @@ def create_subject(request):
         if request.method=='POST':
             form=SubjectForm(request.POST)
             if form.is_valid():
-                form.save()
+                subject=form.save(commit=False)
+                subject.name=subject.name.lower()
+                subject.save()
                 return redirect('subject')
         return render(request,'results/subject_form.html',context)
     else:
@@ -95,7 +101,7 @@ def create_sem(request):
                     semester.semester_name=str(semester.year)+'-'+str(semester.season)
                     semester.save()
                 except:
-                       messages.error("Semester already Exists") 
+                       messages.error(request,"Semester already Exists") 
                 return redirect('semester')
             
         return render(request,'results/sem_form.html',context)
@@ -224,6 +230,7 @@ def admin_result_view(request,pk):
 @login_required(login_url='login')
 def create_final_result(student_obj,sem_obj,arrear_count,tot_credits,grade_list):
     cgpa=sum(grade_list)/len(grade_list)
+    print(student_obj,sem_obj,arrear_count,tot_credits,grade_list,cgpa)
     try:
         FinalResult.objects.create(student=student_obj,semester=sem_obj,cgpa=cgpa,no_of_arrears=arrear_count,total_credits=tot_credits)
     except:
@@ -243,16 +250,19 @@ def create_result(request,pk):
         batch_obj=student_obj.batch
         try:
             sem_papers_obj=SemPapers.objects.get(semester=semester_obj,dept=dept_obj,batch=batch_obj)
+            
         except:
             messages.error(request,"No semester is assigned till now")
             return redirect('home')
         subjects=sem_papers_obj.subjects.all()
-        ResultFormSet=inlineformset_factory(Profile,Result,fields=('subject','grade'), extra=len(subjects),can_delete=False)
+        ResultFormSet=inlineformset_factory(Profile,Result,fields=('subject','grade'), extra=len(subjects)+3,can_delete=False)
 
         formset=ResultFormSet(queryset=Result.objects.none())
-        for index,form in enumerate(formset):
-            form['subject'].initial=subjects[index]
-            
+        try:
+            for index,form in enumerate(formset):
+                form['subject'].initial=subjects[index]
+        except:
+            pass    
         if request.method=='POST':
             
             arrear_count=0
@@ -296,6 +306,106 @@ def create_result(request,pk):
                 
         context={'formset':formset,'subjects':subjects,'sem_obj':semester_obj,'student_obj':student_obj,'page':page}
         return render(request,'results/create_result_form.html',context)
+    else:
+        messages.error(request,'Only verified Admin users have access to this!')
+        return redirect('home')
+
+def add_result_using_csv(myfile):
+    error_messages=''
+    unadded_students_list=[]
+    
+  
+    with open(myfile.file_name.path,'r') as csvfile:
+        csvreader=csv.reader(csvfile)
+        head=next(csvreader)
+        
+        unadded_students=[]
+        for row in csvreader:
+            objs=[]
+            arrear_count=0
+            tot_credits=0
+            grade_list=[]
+            if len(row)>0:
+                student_roll_no=row[0].lower()
+            else:
+                break
+            semester_year,semester_season=row[1].split('-')
+            try:
+                student_obj=Profile.objects.get(roll_no=student_roll_no)
+            except:
+                error_messages+="this roll no:{} is not valid\n".format(student_roll_no)
+                continue
+            try:
+                semester_obj=Semester.objects.get(year=semester_year,season=semester_season)
+            except:
+                unadded_students.append(student_obj.roll_no)
+                continue
+            subjects=row[2].split(',')
+            for mark in subjects:
+                subject_code,grade=mark.split('-')
+                grade=int(grade)
+                try:
+                    subject_obj=Subject.objects.get(name=subject_code.lower())
+                except:
+                    error_messages+='{} is not a valid subject'.format(subject_code)
+                    objs.clear()
+                    unadded_students.append(student_obj.roll_no)
+                    break
+                grade_list.append(grade)
+                if grade>=5:
+                    credit=subject_obj.credit
+                    tot_credits+=credit
+                    status=True
+                    if grade>=9:
+                        grade_string='O'
+                    elif grade==8:
+                        grade_string='A'
+                    elif grade==7:
+                        grade_string='B'
+                    elif grade==6:
+                        grade_string='C'
+                    else:
+                        grade_string='D'
+
+                else:
+                    credit=0
+                    status=False
+                    arrear_count+=1
+                    grade_string='E'
+                
+                objs.append(Result(student=student_obj,semester=semester_obj,subject=subject_obj,credit=credit,grade=grade,grade_string=grade_string,status=status)) 
+            try:
+                if len(objs)>0:       
+                    Result.objects.bulk_create(objs=objs)
+                    FinalResult.objects.create(student=student_obj,semester=semester_obj,cgpa=sum(grade_list)/len(grade_list),no_of_arrears=arrear_count,total_credits=tot_credits)
+            except:
+                unadded_students.append(student_obj.roll_no)
+    if len(unadded_students)>0:
+        error_messages+="\nThe following student's result has not been added"
+        for student in unadded_students:
+            error_messages+="{},".format(student)
+    return error_messages
+
+@login_required(login_url='login')
+def csv_upload(request):
+    if request.user.profile.role=='admin' and request.user.profile.verified==True:
+        form=csv_form()
+        if request.method=='POST':
+            form=csv_form(request.POST,request.FILES)
+            if form.is_valid():
+                if request.FILES['file_name'].name.endswith('.csv'):
+                    myfile=form.save()
+                    error_messages=add_result_using_csv(myfile)
+                    if len(error_messages)==0:
+                        messages.success(request,'Results added successfully')
+                    else:
+                        messages.warning(request,error_messages)
+                    return redirect('students_result')
+                else:
+                    messages.error(request,'File Format must be CSV')  
+                    return redirect('students_result') 
+        context={'form':form}    
+        return render(request,'results/csv_upload_form.html',context)
     else:
         messages.error(request,'Only verified Admin users have access to this!')
         return redirect('home')

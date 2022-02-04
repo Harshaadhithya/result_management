@@ -18,6 +18,7 @@ urlpatterns=[
     path('admin_result_view/<str:pk>',views.admin_result_view,name='admin_result_view'),
     path('create_result/<str:pk>',views.create_result,name='create_result'),
     path('update_result_view/<str:pk>',views.update_result_view,name='update_result_view'),
+    path('csv_upload',views.csv_upload,name='csv_upload'),
 
     path('dept_sem_papers',views.dept_sem_papers,name='dept_sem_papers'),
     path('create_dept_sem_papers',views.create_dept_sem_papers,name='create_dept_sem_papers'),

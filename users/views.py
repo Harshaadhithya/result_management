@@ -214,7 +214,7 @@ def delete_admin(request,pk):
     if request.user.profile.role=='admin' and request.user.profile.verified==True:
         admin=Profile.objects.get(id=pk)
         print(admin.verified)
-        if admin.verified!=False:
+        if admin.verified!=True:
             user=admin.user
             admin.delete()
             user.delete()

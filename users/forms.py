@@ -89,6 +89,7 @@ class StudentUserForm(forms.Form):
         self.fields['profile_img'].widget.attrs.update({'class':'form-control','id':'formGroupExampleInput'})
         self.fields['batch'].widget.attrs.update({'class':'form-control form-select','id':'formGroupExampleInput'})
         self.fields['address'].widget.attrs.update({'class':'form-control','id':'formGroupExampleInput'})
+        self.fields['dob'].widget.attrs.update({'class':'form-control','id':'formGroupExampleInput','placeholder':'YYYY-MM-DD'})
         self.fields['gender'].widget.attrs.update({'class':'form-control form-select','id':'formGroupExampleInput'})
         self.fields['mobile'].widget.attrs.update({'class':'form-control','id':'formGroupExampleInput'})
 

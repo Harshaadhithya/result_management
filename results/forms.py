@@ -3,10 +3,18 @@ from django.forms import ModelForm
 from django.forms.forms import Form
 
 from users.models import Department, Profile
-from .models import Result,FinalResult,Semester,Subject,SemPapers
+from .models import Result,FinalResult,Semester,Subject,SemPapers,ResultCsv
 from django import forms
 import datetime
 
+
+class csv_form(ModelForm):
+    class Meta:
+        model=ResultCsv
+        fields=['file_name']
+    def __init__(self,*args,**kwargs):
+        super(csv_form,self).__init__(*args,**kwargs)
+        self.fields['file_name'].widget.attrs.update({'class':'form-control','id':'formGroupExampleInput'})
 
 class SubjectForm(ModelForm):
     class Meta:
